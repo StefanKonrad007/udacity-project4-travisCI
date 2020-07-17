@@ -17,7 +17,8 @@ before_install:
   - chmod +x ./kubectl
   #- sudo install pip upgrad
   - sudo mv ./kubectl /usr/local/bin/kubectl
-  - aws eks --region eu-west-1 update-kubeconfig --name udacity
+  
+  - aws eks --region eu-central-1 update-kubeconfig --name udacity
 
 
 install:
