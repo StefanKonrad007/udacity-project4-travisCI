@@ -5,7 +5,6 @@ services: docker
 env:
   - DOCKER_COMPOSE_VERSION=1.23.2
 
-
 before_install:
   - echo "$DOCKERHUB_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   - docker -v && docker-compose -v
@@ -15,35 +14,43 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
-  #- sudo install pip upgrad
+  - sudo pip install --upgrade pip
+  - sudo pip install awscli
   - sudo mv ./kubectl /usr/local/bin/kubectl
-  
   - aws eks --region eu-central-1 update-kubeconfig --name udacity
 
-
 install:
-  - docker-compose -f course-03/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
+  - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
+  - docker tag stko086/reverseproxy stko086/reverseproxy:$TRAVIS_COMMIT
   - docker push stko086/reverseproxy
-  - docker push stko086/udacity-restapi-feed
+  - docker tag stko086/udacity-restapi-feed stko086/udacity-restapi-feed:$TRAVIS_COMMIT
+  - docker push stko086/udacity-restapi-feed:$TRAVIS_COMMIT
+  - docker tag stko086/udacity-restapi-user stko086/udacity-restapi-user:$TRAVIS_COMMIT
   - docker push stko086/udacity-restapi-user
+  - docker tag stko086/frontend stko086/frontend:$TRAVIS_COMMIT
   - docker push stko086/frontend
-  - kubectl apply -f udacity-c3-deployment/k8s/aws-secret.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/env-configmap.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/env-secret.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-service.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-user-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-user-service.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/frontend-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/frontend-service.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-service.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/ingress-object.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/aws-secret.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/env-configmap.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/env-secret.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-service.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-user-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-user-service.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/frontend-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/frontend-service.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-service.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/ingress-object.yaml
   # nur image aktuallisieren
-  - kubectl rollout restart deployment/frontend
-  - kubectl rollout restart deployment/backend-feed
-  - kubectl rollout restart deployment/backend-user
-  - kubectl rollout restart deployment/reverseproxy
+  # - kubectl rollout restart deployment/frontend
+  # - kubectl rollout restart deployment/backend-feed
+  # - kubectl rollout restart deployment/backend-user
+  # - kubectl rollout restart deployment/reverseproxy
+
+  - kubectl set image deployment/reverseproxy reverseproxy=stko086/reverseproxy:$TRAVIS_COMMIT
+  - kubectl set image deployment/backend-feed backend-feed=stko086/udacity-restapi-feed:$TRAVIS_COMMIT
+  - kubectl set image deployment/backend-user backend-user=stko086/udacity-restapi-user:$TRAVIS_COMMIT
+  - kubectl set image deployment/frontend frontend=stko086/frontend:$TRAVIS_COMMIT
   
   
   - kubectl get pods

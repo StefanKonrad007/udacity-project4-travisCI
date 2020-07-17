@@ -15,7 +15,6 @@ spec:
         service: backend-feed
     spec:
       containers:
-      #- image: datacamp186/udacity-restapi-feed:ab7890193983d8c9926a643b06581b291c8b4f2f
       - image: stko086/udacity-restapi-feed
         name: backend-feed
         imagePullPolicy: Always  
