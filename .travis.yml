@@ -4,10 +4,7 @@ services: docker
 
 env:
   - DOCKER_COMPOSE_VERSION=1.23.2
-secure:
   
-
-
 before_install:
   - echo "$DOCKERHUB_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   - docker -v && docker-compose -v
@@ -25,13 +22,13 @@ before_install:
 install:
   - docker-compose -f udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
   - docker tag stko086/reverseproxy stko086/reverseproxy:$TRAVIS_COMMIT
-  - docker push stko086/reverseproxy
+  - docker push stko086/reverseproxy:$TRAVIS_COMMIT
   - docker tag stko086/udacity-restapi-feed stko086/udacity-restapi-feed:$TRAVIS_COMMIT
   - docker push stko086/udacity-restapi-feed:$TRAVIS_COMMIT
   - docker tag stko086/udacity-restapi-user stko086/udacity-restapi-user:$TRAVIS_COMMIT
-  - docker push stko086/udacity-restapi-user
+  - docker push stko086/udacity-restapi-user:$TRAVIS_COMMIT
   - docker tag stko086/frontend stko086/frontend:$TRAVIS_COMMIT
-  - docker push stko086/frontend
+  - docker push stko086/frontend:$TRAVIS_COMMIT
   # - kubectl apply -f udacity-c3-deployment/k8s/aws-secret.yaml
   # - kubectl apply -f udacity-c3-deployment/k8s/env-configmap.yaml
   # - kubectl apply -f udacity-c3-deployment/k8s/env-secret.yaml
