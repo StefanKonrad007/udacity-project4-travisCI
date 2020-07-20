@@ -46,7 +46,7 @@ install:
   # - kubectl rollout restart deployment/backend-feed
   # - kubectl rollout restart deployment/backend-user
   # - kubectl rollout restart deployment/reverseproxy
-
+  #ich checks halt nicht 
   - kubectl set image deployment/reverseproxy reverseproxy=stko086/reverseproxy:$TRAVIS_COMMIT
   - kubectl set image deployment/backend-feed backend-feed=stko086/udacity-restapi-feed:$TRAVIS_COMMIT
   - kubectl set image deployment/backend-user backend-user=stko086/udacity-restapi-user:$TRAVIS_COMMIT
