@@ -4,6 +4,9 @@ services: docker
 
 env:
   - DOCKER_COMPOSE_VERSION=1.23.2
+secure:
+  
+
 
 before_install:
   - echo "$DOCKERHUB_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin

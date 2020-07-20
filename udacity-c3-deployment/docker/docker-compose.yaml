@@ -43,7 +43,7 @@ services:
     networks:
       - udagram
   frontend:
-    image: stko086/udacity-frontend
+    image: stko086/udacity-frontend:local
     ports:
       - "8100:80"
     networks:
