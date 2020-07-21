@@ -27,8 +27,8 @@ install:
   - docker push stko086/udacity-restapi-feed:$TRAVIS_COMMIT
   - docker tag stko086/udacity-restapi-user stko086/udacity-restapi-user:$TRAVIS_COMMIT
   - docker push stko086/udacity-restapi-user:$TRAVIS_COMMIT
-  - docker tag stko086/frontend stko086/frontend:$TRAVIS_COMMIT
-  - docker push stko086/frontend:$TRAVIS_COMMIT
+  - docker tag stko086/udacity-frontend stko086/udacity-frontend:$TRAVIS_COMMIT
+  - docker push stko086/udacity-frontend:$TRAVIS_COMMIT
   # - kubectl apply -f udacity-c3-deployment/k8s/aws-secret.yaml
   # - kubectl apply -f udacity-c3-deployment/k8s/env-configmap.yaml
   # - kubectl apply -f udacity-c3-deployment/k8s/env-secret.yaml
